@@ -1,10 +1,10 @@
 'use-strict';
-
+/* Have to call this first to use Google API */
 /* variables used throughout */
 var map; 
 var watchKey; 
 var userMarker;
-var circle; 
+var circle;  
 var shadowCasters = 
 [
     {
@@ -17,9 +17,11 @@ var shadowCasters =
     }
 ]
 var shadowCasterMarkers = []
-
+var circleTimeOut = setTimeout(()=>{},0); 
+var initLocation = {lat: 36.761963699999995, lng: -119.73101000000001};
 /* Geolocation */
 function showMapAndUser(){
+    
     const options = {
         enableHighAccuracy: true,
         timeout: 1000 * 5,
@@ -66,6 +68,17 @@ function showMapAndUser(){
 
 function loadShadowCasters(){
     function load(){
+        circle = new google.maps.Circle({
+            strokeColor: 'white',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: 'blue',
+            fillOpacity: 0.35,
+            map: null,
+            center: initLocation,
+            radius: 300
+          });
+
         for(let i = 0; i < shadowCasters.length; i ++){
             let shadowCasterMarker =  new google.maps.Marker(
                 {
@@ -75,42 +88,34 @@ function loadShadowCasters(){
                     icon: "./images/cube.gif",
                     optimized: false
                 });
-                
-            shadowCasterMarker.addListener("click", function shadowCasterClicked(){
-                if (isWithinRange()){
-                    if (circle){
-                        circle.setCenter(shadowCasterMarker.getPosition());
-                        circle.setMap(map);
-                    } else {
-                        circle = new google.maps.Circle({
-                            strokeColor: 'white',
-                            strokeOpacity: 0.8,
-                            strokeWeight: 2,
-                            fillColor: 'blue',
-                            fillOpacity: 0.35,
-                            map: map,
-                            center: shadowCasterMarker.getPosition(),
-                            radius: 300
-                          });
-                    }
-                    setTimeout(function removeCircle(){
-
-                        if (circle.getMap()){
-                            circle.setMap(null);
-                        }
-                    }, 1000 * 3);
-                }
-            });
+            shadowCasterMarker.addListener("click", shadowCasterClicked.bind(this, shadowCasterMarker));
             shadowCasterMarkers.push(shadowCasterMarker);
         }
     }
-    /* Waits in order to make sure make exists */
-    setTimeout(load, 1000 * 3);
-
-    function isWithinRange(){
+    function isFarAway(){
         /* To do */
         return true;
     }
+    function shadowCasterClicked(shadowCasterMarker){
+        if (isFarAway()){
+            circle.setCenter(shadowCasterMarker.getPosition());
+            circle.setMap(map);
+            setCircleTimeOut();
+        }
+    }
+    function setCircleTimeOut(){
+        if (! circleTimeOut._called){
+            clearTimeout(circleTimeOut);
+        }
+        circleTimeOut = setTimeout(function removeCircle(){
+            if (circle.getMap()){
+                circle.setMap(null);
+            }
+        }, 1000 * 3);
+    }
+
+    /* Waits in order to make sure make exists */
+    setTimeout(load, 1000 * 3);
 }
 
 function getChallenge(){
@@ -118,11 +123,12 @@ function getChallenge(){
 }
 
 /* Main */
-function initMap() {
+function main() {
     map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: 36.761963699999995, lng: -119.73101000000001},
+      center: initLocation,
       zoom: 15
     });
+    showMapAndUser();
+    loadShadowCasters();
   }
-showMapAndUser();
-loadShadowCasters();
+
