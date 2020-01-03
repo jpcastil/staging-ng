@@ -1,7 +1,19 @@
-.binaryCircle {
-    color: orange; font-size: 3em"
-}
 .binaryColWrapper {
     display:flex;
     justify-content: space-evenly;
-}
+  }
+  .binaryColWrapper i{
+    color: black; 
+    font-size: 10vw;
+  }
+  #number{
+    font-size: 12vw;;
+  }
+  @media only screen and (min-width: 768px) {
+    .binaryColWrapper i {
+      font-size: 6vw;
+    }
+    #number{
+      font-size: 8vw;
+    }
+  }

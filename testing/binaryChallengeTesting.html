@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>binaryChallenge</title>
+    <!-- Boostrap meta tags. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- binaryChallenge CSS -->
+    <style>
+      
+      .binaryColWrapper {
+        display:flex;
+        justify-content: space-evenly;
+      }
+      .binaryColWrapper i{
+        color: black; 
+        font-size: 10vw;
+      }
+      #number{
+        font-size: 12vw;;
+      }
+      @media only screen and (min-width: 768px) {
+        .binaryColWrapper i {
+          font-size: 6vw;
+        }
+        #number{
+          font-size: 8vw;
+        }
+      }
+      
+    </style>
+  </head>
+  <body>
+
+    <div class="container-fluid" id="challenge">
+      <p id="number" class="text-center">
+      </p>
+      <div class="row">
+        <div class="col"> </div>
+        <div class="col-12 col-md-8 binaryColWrapper" > <span id="circle7" > <i class="fas fa-circle" ></i> </span> <span id="circle6" > <i class="fas fa-circle" ></i> </span> <span id="circle5" > <i class="fas fa-circle" ></i> </span> <span id="circle4" > <i class="fas fa-circle" ></i> </span> <span id="circle3" > <i class="fas fa-circle" ></i> </span> <span id="circle2" > <i class="fas fa-circle" ></i> </span> <span id="circle1" > <i class="fas fa-circle" ></i> </span> <span id="circle0" > <i class="fas fa-circle" ></i> </span> </div>
+        <div class="col"> </div>
+      </div>
+    </div>
+    
+    
+
+    <!-- End of body -->
+    <!-- jQuery (also a Bootstrap dependency -->
+    <script src="./../scripts/jquery-3.4.1.js"></script>
+    <!-- Bootstrap dependencies --> 
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/7fe2d7cb24.js" crossorigin="anonymous"></script>
+    <script>
+      'use strict';
+      var onColor = "red";
+      var randomNumber; 
+      var value = 0; 
+      /* Binary values */
+      var binVals = [1, 2, 4, 8, 16, 32, 64, 128];
+      /* Selectors for jQuery */
+      var selectors = ["#circle0 i", "#circle1 i", "#circle2 i", "#circle3 i", "#circle4 i", "#circle5 i", "#circle6 i", "#circle7 i"];
+      /* Ids for DOM manipulation */
+      var ids = ["circle0", "circle1", "circle2", "circle3", "circle4", "circle5", "circle6", "circle7"];
+      /* False = black (off), True = red (on) */
+      var colors = [false, false, false, false, false, false, false, false]
+
+      /* Attaches a click event listener to each Circle */
+      for (let i = 0; i < ids.length; i ++){
+        document.getElementById(ids[i]).addEventListener("click", clickedCircle.bind(this, i));
+      }
+      
+      /*  Click listener. Toggles color, adds/ subtracts binary value, and checks 
+          if user is complete */
+      function clickedCircle(index){
+        toggleColor(index);
+        toggleValue(index);
+        isComplete();
+      }
+
+      /*  Toggles color */
+      function toggleColor(index){
+        var newColor = colors[index] ? "black" : onColor;
+        colors[index] = ! colors[index];
+        $(selectors[index]).css("color", newColor);
+      }
+
+      /* Adds/ Subtracts value depending if user turned the circle on/off */
+      function toggleValue(index){
+        var sign = colors[index] ? 1 : -1;
+        value += (sign * binVals[index]);
+      }
+
+      /* Generates a number from 1 to 255 */
+      function generateRandomNumber(){
+        randomNumber = Math.floor((Math.random() * 255) + 1);
+        $("#number").text(randomNumber);
+      };
+
+      /* Gets if the value is equal to the originally made random Number */
+      function isComplete(){
+        if (randomNumber === value){
+          challengeCompleted();
+        };
+      }
+
+      function challengeCompleted(){
+        alert("Congrats! You know how to count binary!!");
+      }
+
+      generateRandomNumber()
+    </script>
+  </body>
+</html>
+
+
