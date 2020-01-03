@@ -1,5 +1,5 @@
 'use-strict';
-/* Have to call this first to use Google API */
+
 /* variables used throughout */
 var map; 
 var watchKey; 
@@ -19,55 +19,87 @@ var shadowCasters =
 var shadowCasterMarkers = []
 var circleTimeOut = setTimeout(()=>{},0); 
 var initLocation = {lat: 36.761963699999995, lng: -119.73101000000001};
-/* Geolocation */
-function showMapAndUser(){
+
+
+/* Call this function to show and track user on the map. */
+function showAndTrackUser(){
     
+    /* Options for Geolocation API. See doc. for more. */
     const options = {
         enableHighAccuracy: true,
-        timeout: 1000 * 5,
+        timeout: 1000 * 10,
         maximumAge: 0
     }
+    /*  Success callback function for Geolocation API. 
+        Browser asks for location, waits for it, and then
+        calls this function (with position as an argument) */
     function success(position){
+        /*  Converting Geolocation posiiton object to a 
+            Google position object */
         var pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-        if (map){
-            map.panTo(pos);
-            if (! userMarker){
-                userMarker = new google.maps.Marker({
-                    position: pos, 
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 8,
-                        fillColor: "#4090e4",
-                        strokeColor: "#ffff",
-                        strokeWeight: 1,
-                        fillOpacity: 1
-                      }
-                    /*icon: './images/dot.png'*/
-                });
-            } else {
-                userMarker.setPosition(pos);
-            }  
-        }
+        
+        /*  Change the view of the map to center around the new 
+            position */
+        map.panTo(pos);
+        /*  If userMarker does not exist (will be null if it 
+            doesn't), create one */
+        if (! userMarker){
+            userMarker = new google.maps.Marker({
+            position: pos, 
+            map: map,
+            /*  This is the blue icon. See doc. to change it. */
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4090e4",
+                strokeColor: "#ffff",
+                strokeWeight: 1,
+                fillOpacity: 1
+                }});
+        } else {
+            /*  Otherwise, change the position of it */
+            userMarker.setPosition(pos);
+        } 
     }
+
+    /*  Error callback function for Geolocation API. 
+        Browser asks for location, waits for it, and if it 
+        cannot receive it, it then calls this function 
+        (with error object as an argument) */
     function error(error){
         var message = "Problem with Geolocation. " + error.message;
-        alert(message);
+        console.log(message);
     }
-    /* If geolocation enabled, GEO will be an object */
+    /*  If geolocation enabled, GEO will be an object, null otherwise.
+        If applicable, this will ask for user permission as well.
+    */
     if (navigator.geolocation){
+        /*  Watches position for changes with success & error callback.
+            Options are optional. If highAccuracy enabled the first 
+            geolocation retrieval may take a while 
+            
+            The watchPosition function returns a watchKey to stop watching
+            for positional changes. 
+        */
+
         watchKey = navigator.geolocation.watchPosition(success, error, options); 
     } else {
-        alert("Browser does not support Geolocation.");
+        alert("Browser does not support Geolocation. Make sure location services are enabled, and give permission to access location. Please contact the administrators for further assistance.");
     }
 }
 
-
+/*  Call this function to load shadowCasters. Customize shadowCasters 
+    by changing the shadowCasters variable */
 function loadShadowCasters(){
+    /* This is the function to load the shadowCasters in */
     function load(){
+        /*  A Google Maps Circle object to be around the shadowCaster
+            to show its acceptible click radius. If player is already 
+            within the click radius, it will not show blue circle. Instead,
+            it will show the challenge per that shadowCaster */
         circle = new google.maps.Circle({
             strokeColor: 'white',
             strokeOpacity: 0.8,
@@ -78,31 +110,55 @@ function loadShadowCasters(){
             center: initLocation,
             radius: 300
           });
-
+        
+        /*  For loop creating shadowCaster Google Map Markers and adding 
+            click listeners to show click radius / bring up challenge */
         for(let i = 0; i < shadowCasters.length; i ++){
             let shadowCasterMarker =  new google.maps.Marker(
                 {
                     position: shadowCasters[i], 
                     map: map,
+                    /*  Upon load, shadowCaster will "drop" onto the map. 
+                        See API for further details/*/
                     animation: google.maps.Animation.DROP,
+                    /* Icon for shadowCaster marker. See API for further details.*/
                     icon: "./images/cube.gif",
+                    /* This needs to be set to false to allows for gif's to show */
                     optimized: false
                 });
+            /*  This adds the click event to each shadowCaster.
+                shadowCasterClicked needs to be called for each shadowCaster, 
+                so bind is called to pass in the shadowCaster argument. This could
+                be easily solved with a class/ prototype.    
+            */
             shadowCasterMarker.addListener("click", shadowCasterClicked.bind(this, shadowCasterMarker));
             shadowCasterMarkers.push(shadowCasterMarker);
         }
     }
+    
     function isFarAway(){
         /* To do */
-        return true;
+        return false;
     }
+
+    /*  This is called whenever each shadowCaster clicked 
+        If it is too far awya, it will show a click radius.
+        Otherwise, it will bring up the respective challenge.
+    */
     function shadowCasterClicked(shadowCasterMarker){
         if (isFarAway()){
             circle.setCenter(shadowCasterMarker.getPosition());
             circle.setMap(map);
             setCircleTimeOut();
+        } else {
+            getChallenge();
         }
     }
+
+    /*  On each shadowCaster click (that is too far away), the circle 
+        should only show for X seconds. This function handles that.
+        Also, if you jump around clicking other shadowCasters, it will
+        reset the timer for displaying the circle. */
     function setCircleTimeOut(){
         if (! circleTimeOut._called){
             clearTimeout(circleTimeOut);
@@ -113,22 +169,26 @@ function loadShadowCasters(){
             }
         }, 1000 * 3);
     }
-
-    /* Waits in order to make sure make exists */
-    setTimeout(load, 1000 * 3);
+    load();
 }
 
+/*  Gets respective shadowCaster challenge */
 function getChallenge(){
+    startBinaryCaster();
+}
 
+/*  Shows map on the div w/ id of "map" */
+function showMap(){
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: initLocation,
+        zoom: 15
+      });
 }
 
 /* Main */
 function main() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: initLocation,
-      zoom: 15
-    });
-    showMapAndUser();
+    showMap();
+    showAndTrackUser();
     loadShadowCasters();
   }
 
