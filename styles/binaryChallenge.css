@@ -1,0 +1,7 @@
+.binaryCircle {
+    color: orange; font-size: 3em"
+}
+.binaryColWrapper {
+    display:flex;
+    justify-content: space-evenly;
+}

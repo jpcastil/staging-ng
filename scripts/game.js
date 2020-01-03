@@ -174,7 +174,7 @@ function loadShadowCasters(){
 
 /*  Gets respective shadowCaster challenge */
 function getChallenge(){
-    startBinaryCaster();
+    startBinaryChallenge();
 }
 
 /*  Shows map on the div w/ id of "map" */
@@ -191,4 +191,5 @@ function main() {
     showAndTrackUser();
     loadShadowCasters();
   }
+
 
