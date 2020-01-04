@@ -17,6 +17,16 @@ var shadowCasters =
     {
         lat: 36.764669,
         lng: -119.728304
+    },
+    /* M */
+
+    {
+        lat: 35.55599,
+        lng: -120.696245
+    },
+    {
+        lat: 35.5591351,
+        lng: -120.7075995
     }
 ]
 
@@ -179,14 +189,15 @@ function loadShadowCasters(){
 
 /*  Gets respective shadowCaster challenge */
 function getChallenge(){
-    startBinaryChallenge();
+    changeDisplay();
+    /* startBinaryChallenge(); */
 }
 
 /*  Shows map on the div w/ id of "map" */
 function showMap(){
     map = new google.maps.Map(document.getElementById('map'), {
         center: initLocation,
-        zoom: 15
+        zoom: 13
       });
 }
 
