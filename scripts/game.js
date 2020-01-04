@@ -18,16 +18,6 @@ var shadowCasters =
         lat: 36.764669,
         lng: -119.728304
     },
-    /* M */
-
-    {
-        lat: 35.55599,
-        lng: -120.696245
-    },
-    {
-        lat: 35.5591351,
-        lng: -120.7075995
-    }
 ]
 
 var shadowCasterMarkers = []
@@ -189,8 +179,7 @@ function loadShadowCasters(){
 
 /*  Gets respective shadowCaster challenge */
 function getChallenge(){
-    changeDisplay();
-    /* startBinaryChallenge(); */
+    startBinaryChallenge(); 
 }
 
 /*  Shows map on the div w/ id of "map" */
