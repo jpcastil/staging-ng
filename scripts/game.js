@@ -1,6 +1,9 @@
 'use-strict';
 
 /* variables used throughout */
+/*  The radius in meters that the player should be able to get the 
+    shadowCaster challenge (+- 50 meters) */
+var radius = 681; 
 var map; 
 var watchKey; 
 var userMarker;
@@ -16,6 +19,7 @@ var shadowCasters =
         lng: -119.728304
     }
 ]
+
 var shadowCasterMarkers = []
 var circleTimeOut = setTimeout(()=>{},0); 
 var initLocation = {lat: 36.761963699999995, lng: -119.73101000000001};
@@ -108,7 +112,7 @@ function loadShadowCasters(){
             fillOpacity: 0.35,
             map: null,
             center: initLocation,
-            radius: 300
+            radius: radius
           });
         
         /*  For loop creating shadowCaster Google Map Markers and adding 
@@ -136,9 +140,10 @@ function loadShadowCasters(){
         }
     }
     
-    function isFarAway(){
+    function isFarAway(shadowCasterMarker){
         /* To do */
-        return false;
+        var distance = getDistance(userMarker.getPosition(), shadowCasterMarker.getPosition());
+        return distance > radius;
     }
 
     /*  This is called whenever each shadowCaster clicked 
@@ -146,7 +151,7 @@ function loadShadowCasters(){
         Otherwise, it will bring up the respective challenge.
     */
     function shadowCasterClicked(shadowCasterMarker){
-        if (isFarAway()){
+        if (isFarAway(shadowCasterMarker)){
             circle.setCenter(shadowCasterMarker.getPosition());
             circle.setMap(map);
             setCircleTimeOut();
@@ -191,5 +196,35 @@ function main() {
     showAndTrackUser();
     loadShadowCasters();
   }
+
+/* Grabs the distance in meters from one Google pos to another */
+function getDistance(pos1, pos2) {
+    var lat1 = pos1.lat();
+    var lon1 = pos1.lng();
+
+    var lat2 = pos2.lat();
+    var lon2 = pos2.lng();
+
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+        return 0;
+    } else {
+        var radlat1 = Math.PI * lat1 / 180;
+        var radlat2 = Math.PI * lat2 / 180;
+        var theta = lon1 - lon2;
+        var radtheta = Math.PI * theta / 180;
+        var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+        if (dist > 1) {
+            dist = 1;
+        }
+        dist = Math.acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+        /* Conversion to km */
+        dist = dist * 1.609344 ;
+        /* Conversion to m */
+        dist = dist * 1000;
+        return dist; 
+    }
+}
 
 
