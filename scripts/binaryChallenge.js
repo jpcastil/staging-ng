@@ -33,7 +33,7 @@ function startBinaryChallenge(){
     
     /*  Toggles color */
     function toggleColor(index) {
-        var newColor = colors[index] ? "black" : onColor;
+        var newColor = colors[index] ? "white" : onColor;
         colors[index] = !colors[index];
         $(selectors[index]).css("color", newColor);
     }

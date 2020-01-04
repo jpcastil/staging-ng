@@ -58,7 +58,7 @@ function showAndTrackUser(){
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 8,
-                fillColor: "#4090e4",
+                fillColor: "red",
                 strokeColor: "#ffff",
                 strokeWeight: 1,
                 fillOpacity: 1
@@ -108,7 +108,7 @@ function loadShadowCasters(){
             strokeColor: 'white',
             strokeOpacity: 0.8,
             strokeWeight: 2,
-            fillColor: 'blue',
+            fillColor: 'black',
             fillOpacity: 0.35,
             map: null,
             center: initLocation,
@@ -126,9 +126,9 @@ function loadShadowCasters(){
                         See API for further details/*/
                     animation: google.maps.Animation.DROP,
                     /* Icon for shadowCaster marker. See API for further details.*/
-                    icon: "./images/cube.gif",
+                    icon: new google.maps.MarkerImage("./images/mvp.png"),
                     /* This needs to be set to false to allows for gif's to show */
-                    optimized: false
+                    optimized: true
                 });
             /*  This adds the click event to each shadowCaster.
                 shadowCasterClicked needs to be called for each shadowCaster, 

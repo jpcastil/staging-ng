@@ -3,11 +3,12 @@
     justify-content: space-evenly;
   }
   .binaryColWrapper i{
-    color: black; 
+    color: white; 
     font-size: 10vw;
   }
   #number{
-    font-size: 12vw;;
+    font-size: 12vw;
+    color: red;
   }
   @media only screen and (min-width: 768px) {
     .binaryColWrapper i {

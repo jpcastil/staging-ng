@@ -1,13 +1,27 @@
 #map {
-    height: 50%;
+    height: 90%;
 }
 
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Press Start 2P', cursive;
+    background-color: black;
 }
 
 #challenge {
     display: none;
+}
+
+.navbar-header {
+    text-align: center;
+    width: 100%;
+}
+
+.navbar-header a:hover{
+    color: white;
+}
+.navbar-brand {
+    color: red;
 }
