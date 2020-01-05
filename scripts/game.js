@@ -38,6 +38,7 @@ function showAndTrackUser(){
         Browser asks for location, waits for it, and then
         calls this function (with position as an argument) */
     function success(position){
+        alert("newpos");
         /*  Converting Geolocation posiiton object to a 
             Google position object */
         var pos = {
