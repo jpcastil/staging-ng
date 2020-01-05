@@ -59,7 +59,33 @@
     <script src="https://kit.fontawesome.com/7fe2d7cb24.js" crossorigin="anonymous"></script>
     <!-- SCRIPT GOES HERE -->
     <script>
+      /* If device is already in landscape, the challenge is already won */
+      (function init(){
+        orientationChanged();
+      })();
+
+      /* Adds event listener for orientation changes. */
+      window.addEventListener("orientationchange", orientationChanged);
+
+      /*  Checks if device is in landscape mode. 90 / -90 === landscape. On mobile devices,
+          it may be that you can only ever be in portrait OR landscape, so it can be 
+          window.orientation != 0, but just to be safe. */
+      function isOrientationLandscape(){
+        return window.orientation === 90 || window.orientation === -90
+      }
+
+      /* Callback function for orientation changed event handler */
+      function orientationChanged(){
+        if (isOrientationLandscape()){
+          isComplete();
+        }
+      }
       
+      /* function to be called if challenge is solved */
+      function isComplete(){
+        alert("Now you see me");
+      }
+
     </script>
   </body>
 </html>

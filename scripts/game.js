@@ -3,7 +3,7 @@
 /* variables used throughout */
 /*  The radius in meters that the player should be able to get the 
     shadowCaster challenge (+- 50 meters) */
-var radius = 681; 
+var radius = 300; 
 var map; 
 var watchKey; 
 var userMarker;
@@ -11,16 +11,25 @@ var circle;
 var shadowCasters = 
 [
     {
-        lat: 36.7650999,
-        lng: -119.7375864  
+        /*startChallenge: startBinaryChallenge,*/
+        pos: {
+            lat: 35.299307,
+            lng: -120.655827,
+        }, 
     },
     {
-        lat: 36.764669,
-        lng: -119.728304
+        /* startChallenge: startBinaryChallenge,*/
+        pos: {
+            lat: 35.2989883,
+            lng: -120.6606516
+        },
+        
     },
 ]
 
-var shadowCasterMarkers = []
+
+
+var shadowCasterMarkers = [];
 var circleTimeOut = setTimeout(()=>{},0); 
 var initLocation = {lat: 36.761963699999995, lng: -119.73101000000001};
 
@@ -120,7 +129,7 @@ function loadShadowCasters(){
         for(let i = 0; i < shadowCasters.length; i ++){
             let shadowCasterMarker =  new google.maps.Marker(
                 {
-                    position: shadowCasters[i], 
+                    position: shadowCasters[i].pos, 
                     map: map,
                     /*  Upon load, shadowCaster will "drop" onto the map. 
                         See API for further details/*/
@@ -136,6 +145,8 @@ function loadShadowCasters(){
                 be easily solved with a class/ prototype.    
             */
             shadowCasterMarker.addListener("click", shadowCasterClicked.bind(this, shadowCasterMarker));
+
+            /* shadowCasterMarker._$startChallenge_ = shadowCasters[i].startChallenge;*/
             shadowCasterMarkers.push(shadowCasterMarker);
         }
     }
@@ -179,7 +190,8 @@ function loadShadowCasters(){
 
 /*  Gets respective shadowCaster challenge */
 function getChallenge(){
-    startBinaryChallenge(); 
+    /* To do */
+    startBinaryChallenge();
 }
 
 /*  Shows map on the div w/ id of "map" */
@@ -226,9 +238,3 @@ function getDistance(pos1, pos2) {
         return dist; 
     }
 }
-
-
-alert(window.orientation);
-window.addEventListener("orientationchange", function oChanged(){
-    alert(window.orientation);
-})
