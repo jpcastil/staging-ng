@@ -3,7 +3,7 @@
 
 function startOrientationChallenge(){
   changeDisplay();
-  addHTML('<div class="row"> <div class="col"> </div> <div class="col-6"> <p class="text-center" id="oc-text"> A circle that sees controls me <br /><br /> At times you use me watch <br /> Can’t fit them all? See me <br /><br /> Unforeseen, I sometimes be <br /> But fear not, just lean <br /><br /> You seek the key, I see <br /> It’s easy. Don’t be so weighty <br /> To land, you must bring me <br /><br /> To what degree you ask? <br /><br /> Make width larger than height <br /> Only then, shall you see me </p> </div> <div class="col"> </div> </div>');
+  addHTML('<div class="row"> <div class="col"> </div> <div class="col-8 col-md-6"> <p class="text-center" id="oc-text"> A circle that sees controls me <br /><br /> At times you use me watch <br /> Can’t fit them all? See me <br /><br /> Unforeseen, I sometimes be <br /> But fear not, just lean <br /><br /> You seek the key, I see <br /> It’s easy. Don’t be so weighty <br /> To land, you must bring me <br /><br /> To what degree you ask? <br /><br /> Make width larger than height <br /> Only then, shall you see me </p> </div> <div class="col"> </div> </div>');
   orientationChanged();
 
   /* Adds event listener for orientation changes. */
