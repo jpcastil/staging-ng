@@ -16,19 +16,19 @@ var circle;
 var shadowCasters = 
 [
     {
-        /* startChallenge: startBinaryChallenge,*/
-        pos: {
-            lat: 35.299307,
-            lng: -120.655827,
-        }   
-    },
-    {
         /*startChallenge: startBinaryChallenge,*/
         pos: {
             lat: 35.306319,
             lng: -120.659265
             
         }
+    },
+    {
+        /* startChallenge: startBinaryChallenge,*/
+        pos: {
+            lat: 35.299307,
+            lng: -120.655827,
+        }   
     }
 ]
 
