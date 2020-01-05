@@ -8,6 +8,11 @@ var map;
 var watchKey; 
 var userMarker;
 var circle;  
+/*  These shadowCasters will call the challenges from the challengers list.
+    Because the challenges must be scanned in the the JS engine first,
+    at the very end of the index.html, there is a addChallenges JS file
+    Thus, you can arrange what challenges you want for each SC below. 
+    This is tentative the solution until modules may be added. */
 var shadowCasters = 
 [
     {
@@ -15,19 +20,19 @@ var shadowCasters =
         pos: {
             lat: 35.299307,
             lng: -120.655827,
-        }, 
+        }
     },
     {
         /* startChallenge: startBinaryChallenge,*/
         pos: {
             lat: 35.2989883,
             lng: -120.6606516
-        },
-        
-    },
+        }   
+    }
 ]
 
 
+var challenges = [];
 
 var shadowCasterMarkers = [];
 var circleTimeOut = setTimeout(()=>{},0); 
@@ -144,9 +149,7 @@ function loadShadowCasters(){
                 so bind is called to pass in the shadowCaster argument. This could
                 be easily solved with a class/ prototype.    
             */
-            shadowCasterMarker.addListener("click", shadowCasterClicked.bind(this, shadowCasterMarker));
-
-            /* shadowCasterMarker._$startChallenge_ = shadowCasters[i].startChallenge;*/
+            shadowCasterMarker.addListener("click", shadowCasterClicked.bind(this, shadowCasterMarker, i));
             shadowCasterMarkers.push(shadowCasterMarker);
         }
     }
@@ -161,13 +164,13 @@ function loadShadowCasters(){
         If it is too far awya, it will show a click radius.
         Otherwise, it will bring up the respective challenge.
     */
-    function shadowCasterClicked(shadowCasterMarker){
+    function shadowCasterClicked(shadowCasterMarker, i){
         if (isFarAway(shadowCasterMarker)){
             circle.setCenter(shadowCasterMarker.getPosition());
             circle.setMap(map);
             setCircleTimeOut();
         } else {
-            getChallenge();
+            getChallenge(i);
         }
     }
 
@@ -189,9 +192,9 @@ function loadShadowCasters(){
 }
 
 /*  Gets respective shadowCaster challenge */
-function getChallenge(){
+function getChallenge(i){
     /* To do */
-    startBinaryChallenge();
+    challenges[i]();
 }
 
 /*  Shows map on the div w/ id of "map" */
