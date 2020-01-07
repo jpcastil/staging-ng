@@ -3,7 +3,7 @@
 /* variables used throughout */
 /*  The radius in meters that the player should be able to get the 
     shadowCaster challenge (+- 50 meters) */
-var radius = 300; 
+var radius = 500; 
 var map; 
 var watchKey; 
 var userMarker;
@@ -20,7 +20,6 @@ var shadowCasters =
         pos: {
             lat: 35.306319,
             lng: -120.659265
-            
         }
     },
     {
@@ -29,10 +28,17 @@ var shadowCasters =
             lat: 35.299307,
             lng: -120.655827,
         }   
+    },
+    {
+        /* startChallenge: startBinaryChallenge,*/
+        pos: {
+            lat: 36.778759,
+            lng: -119.759202,
+        }   
     }
 ]
 
-
+var panEnabled = true;
 var challenges = [];
 
 var shadowCasterMarkers = [];
@@ -40,7 +46,10 @@ var circleTimeOut = setTimeout(()=>{},0);
 var initLocation = {lat: 36.761963699999995, lng: -119.73101000000001};
 
 
-/* Call this function to show and track user on the map. */
+/*  Call this function to show and track user on the map.
+    If trackOrGet is true, it will continusouly track user.
+    If it is false, it will return an object with a success, error, and option fields
+*/
 function showAndTrackUser(){
     
     /* Options for Geolocation API. See doc. for more. */
@@ -62,7 +71,9 @@ function showAndTrackUser(){
         
         /*  Change the view of the map to center around the new 
             position */
-        map.panTo(pos);
+        if (panEnabled){
+            map.panTo(pos);
+        }
         /*  If userMarker does not exist (will be null if it 
             doesn't), create one */
         if (! userMarker){
@@ -95,19 +106,21 @@ function showAndTrackUser(){
     /*  If geolocation enabled, GEO will be an object, null otherwise.
         If applicable, this will ask for user permission as well.
     */
-    if (navigator.geolocation){
-        /*  Watches position for changes with success & error callback.
-            Options are optional. If highAccuracy enabled the first 
-            geolocation retrieval may take a while 
-            
-            The watchPosition function returns a watchKey to stop watching
-            for positional changes. 
-        */
-
-        watchKey = navigator.geolocation.watchPosition(success, error, options); 
-    } else {
-        alert("Browser does not support Geolocation. Make sure location services are enabled, and give permission to access location. Please contact the administrators for further assistance.");
-    }
+   
+        if (navigator.geolocation){
+            /*  Watches position for changes with success & error callback.
+                Options are optional. If highAccuracy enabled the first 
+                geolocation retrieval may take a while 
+                
+                The watchPosition function returns a watchKey to stop watching
+                for positional changes. 
+            */
+    
+            watchKey = navigator.geolocation.watchPosition(success, error, options); 
+        } else {
+            alert("Browser does not support Geolocation. Make sure location services are enabled, and give permission to access location. Please contact the administrators for further assistance.");
+        }
+    
 }
 
 /*  Call this function to load shadowCasters. Customize shadowCasters 
@@ -202,8 +215,19 @@ function getChallenge(i){
 function showMap(){
     map = new google.maps.Map(document.getElementById('map'), {
         center: initLocation,
-        zoom: 13
+        zoom: 16
       });
+    /* When user scrolls around the map, the automatic re-centering is disabled */
+    map.addListener('dragstart', function stopPanning(){
+        panEnabled = false; 
+    });
+    map.addListener('dragend', function startPanning(){
+        setTimeout(function start(){
+            if (userMarker){
+                map.panTo(userMarker.getPosition());
+            }
+        }, 1000 * 10);
+    });
 }
 
 /* Main */
