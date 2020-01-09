@@ -3,7 +3,7 @@
 /* variables used throughout */
 /*  The radius in meters that the player should be able to get the 
     shadowCaster challenge (+- 50 meters) */
-var radius = 500; 
+var radius = 1000; 
 var map; 
 var watchKey; 
 var userMarker;
