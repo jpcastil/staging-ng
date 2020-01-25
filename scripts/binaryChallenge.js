@@ -1,7 +1,8 @@
 'use-strict';
 
+import {addHTML, changeDisplay, clearHTML} from './challengeFuncs.js';
 
-function startBinaryChallenge(){
+export default function startBinaryChallenge(){
     addHTML('<p id="number" class="text-center"></p> <div class="row"> <div class="col"> </div> <div class="col-12 col-md-8 binaryColWrapper" > <span id="circle7" > <i class="fas fa-circle" ></i> </span> <span id="circle6" > <i class="fas fa-circle" ></i> </span> <span id="circle5" > <i class="fas fa-circle" ></i> </span> <span id="circle4" > <i class="fas fa-circle" ></i> </span> <span id="circle3" > <i class="fas fa-circle" ></i> </span> <span id="circle2" > <i class="fas fa-circle" ></i> </span> <span id="circle1" > <i class="fas fa-circle" ></i> </span> <span id="circle0" > <i class="fas fa-circle" ></i> </span> </div> <div class="col"> </div> </div>');
     changeDisplay();
     generateRandomNumber();
@@ -58,8 +59,14 @@ function startBinaryChallenge(){
     }
     
     function challengeCompleted() {
-        alert("Congrats! You know how to count binary!!");
-        changeDisplay();
+        /*  Small delay. Sometimes the final binary circle isn't able to change 
+        *   in time
+        */
+        setTimeout(()=>{
+            alert("Congrats! You know how to count binary!!");
+            changeDisplay();
+            clearHTML();
+        }, 1000 * 0.25);
     }
     
 }
